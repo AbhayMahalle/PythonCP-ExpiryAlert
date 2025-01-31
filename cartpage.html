@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - TaxBillszz</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        header {
+            background: #bee2fc;
+            padding: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .cart-section {
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .cart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-item {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item h3 {
+            font-size: 18px;
+            color: #222;
+            margin: 0;
+            flex: 1;
+        }
+
+        .price {
+            font-size: 16px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #5baff4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: #007bff;
+        }
+
+        .remove {
+            background: #ff4d4d;
+        }
+
+        .remove:hover {
+            background: #cc0000;
+        }
+
+        #total-amount {
+            font-size: 22px;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 20px;
+        }
+
+        #final-bill {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 18px;
+            background: #28a745;
+        }
+
+        #final-bill:hover {
+            background: #218838;
+        }
+
+        footer {
+            background: #b3e5fc;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        a{
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">TaxBillszz...</div>
+    </header>
+
+    <section class="cart-section">
+        <h1>Your Cart</h1>
+        <div class="cart-container"></div>
+        <div id="total-amount">Total: ₹0</div>
+        <button id="final-bill">Final Bill</button>
+    </section>
+
+    <footer>
+        <a href="productpage.html">Add More Products</a>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cartContainer = document.querySelector(".cart-container");
+            const totalAmountElement = document.getElementById("total-amount");
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            function renderCart() {
+                cartContainer.innerHTML = "";
+                let totalAmount = 0;
+
+                cart.forEach((product, index) => {
+                    const productDiv = document.createElement("div");
+                    productDiv.classList.add("cart-item");
+
+                    const productTotal = product.price * product.quantity;
+                    totalAmount += productTotal;
+
+                    productDiv.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p class="price">₹${product.price}</p>
+                        <input type="number" value="${product.quantity}" min="1" data-index="${index}" class="quantity">
+                        <p class="price total">₹${productTotal}</p>
+                        <button class="remove" data-index="${index}">Remove</button>
+                    `;
+                    cartContainer.appendChild(productDiv);
+                });
+
+                totalAmountElement.innerText = `Total: ₹${totalAmount}`;
+
+                document.querySelectorAll(".quantity").forEach(input => {
+                    input.addEventListener("change", updateQuantity);
+                });
+
+                document.querySelectorAll(".remove").forEach(button => {
+                    button.addEventListener("click", removeItem);
+                });
+            }
+
+            function updateQuantity(event) {
+                const index = event.target.getAttribute("data-index");
+                cart[index].quantity = parseInt(event.target.value);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                renderCart();
+            }
+
+            function removeItem(event) {
+                const index = event.target.getAttribute("data-index");
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                renderCart();
+            }
+
+            document.getElementById("final-bill").addEventListener("click", () => {
+                alert(`Final Bill Amount: ₹${calculateTotal()}`);
+            });
+
+            function calculateTotal() {
+                return cart.reduce((sum, product) => sum + product.price * product.quantity, 0);
+            }
+
+            renderCart();
+        });
+    </script>
+</body>
+</html>
