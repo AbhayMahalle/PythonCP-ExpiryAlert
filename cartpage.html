@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - TaxBillszz</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background: #232f3e;
+            padding: 20px;
+            color: white;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .cart-page {
+            display: flex;
+            gap : 30px;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .cart-container {
+            width: 70%;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        input[type="number"] {
+            width: 60px;
+            text-align: center;
+            padding: 6px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .remove {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .remove:hover {
+            background: #bb2727;
+        }
+
+        .cart-summary {
+            width: 300px;
+            font-size: large;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .cart-summary h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .total-amount {
+            font-size: 22px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .final-bill-btn {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .product-btn {
+            width: fit-content;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+            margin: 10px 0 10px 650px;
+            transition: background 0.3s ease;
+        }
+
+        .final-bill-btn:hover, .product-btn:hover {
+            background: #0056b3;
+        }
+
+
+        a{
+            text-decoration: none;
+            color: white;
+            
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        TaxBillszz Cart
+    </header>
+
+    <div class="cart-page">
+        <div class="cart-container">
+            <div class="cart-items">
+                <h1>Your Cart</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price (₹)</th>
+                            <th>Quantity</th>
+                            <th>Total (₹)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items-body">
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <h2>Order Summary</h2>
+            <div class="summary-row">
+                <p><strong>Subtotal</strong></p>
+                <p class="total-amount">₹0</p>
+            </div>
+            <button class="final-bill-btn">Proceed to Final Bill</button>
+        </div>
+    </div>
+    <div>
+        <button class="product-btn"><a href="productpage.html">Add More Products</a></button>
+    </div>
+    
+        
+   
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const cartItemsBody = document.getElementById("cart-items-body");
+            const totalAmountElement = document.querySelector(".total-amount");
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            function renderCart() {
+                cartItemsBody.innerHTML = "";
+                let totalAmount = 0;
+
+                cart.forEach((product, index) => {
+                    const productTotal = product.price * product.quantity;
+                    totalAmount += productTotal;
+
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>${product.name}</td>
+                        <td>₹${product.price}</td>
+                        <td><input type="number" value="${product.quantity}" min="1" data-index="${index}" class="quantity"></td>
+                        <td>₹${productTotal}</td>
+                        <td><button class="remove" data-index="${index}">Remove</button></td>
+                    `;
+                    cartItemsBody.appendChild(row);
+                });
+
+                totalAmountElement.innerText = `₹${totalAmount}`;
+            }
+
+            function updateQuantity(event) {
+                const index = event.target.getAttribute("data-index");
+                cart[index].quantity = parseInt(event.target.value);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                renderCart();
+            }
+
+            function removeItem(event) {
+                const index = event.target.getAttribute("data-index");
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                renderCart();
+            }
+
+            document.querySelectorAll(".quantity").forEach(input => {
+                input.addEventListener("change", updateQuantity);
+            });
+
+            document.querySelectorAll(".remove").forEach(button => {
+                button.addEventListener("click", removeItem);
+            });
+
+            document.querySelector(".final-bill-btn").addEventListener("click", () => {
+                localStorage.setItem("finalCart", JSON.stringify(cart));
+                window.location.href = "billing.html";
+            });
+
+            renderCart();
+        });
+    </script>
+</body>
+</html>
