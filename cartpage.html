@@ -22,7 +22,7 @@
 
         .cart-page {
             display: flex;
-            gap : 30px;
+            gap: 30px;
             justify-content: center;
             padding: 40px;
         }
@@ -152,18 +152,15 @@
             background: #0056b3;
         }
 
-
-        a{
+        a {
             text-decoration: none;
             color: white;
-            
         }
-
     </style>
 </head>
 <body>
     <header>
-        <a href="index.html">TaxBillszz Cart</a>
+        TaxBillszz Cart
     </header>
 
     <div class="cart-page">
@@ -180,9 +177,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="cart-items-body">
-                       
-                    </tbody>
+                    <tbody id="cart-items-body"></tbody>
                 </table>
             </div>
         </div>
@@ -196,12 +191,10 @@
             <button class="final-bill-btn">Proceed to Final Bill</button>
         </div>
     </div>
+
     <div>
         <button class="product-btn"><a href="productpage.html">Add More Products</a></button>
     </div>
-    
-        
-   
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -218,7 +211,6 @@
                     totalAmount += productTotal;
 
                     const row = document.createElement("tr");
-
                     row.innerHTML = `
                         <td>${product.name}</td>
                         <td>₹${product.price}</td>
@@ -230,13 +222,18 @@
                 });
 
                 totalAmountElement.innerText = `₹${totalAmount}`;
+                attachEventListeners();
             }
 
             function updateQuantity(event) {
                 const index = event.target.getAttribute("data-index");
-                cart[index].quantity = parseInt(event.target.value);
-                localStorage.setItem("cart", JSON.stringify(cart));
-                renderCart();
+                const newQuantity = parseInt(event.target.value);
+
+                if (newQuantity > 0) {
+                    cart[index].quantity = newQuantity;
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    renderCart();
+                }
             }
 
             function removeItem(event) {
@@ -246,13 +243,15 @@
                 renderCart();
             }
 
-            document.querySelectorAll(".quantity").forEach(input => {
-                input.addEventListener("change", updateQuantity);
-            });
+            function attachEventListeners() {
+                document.querySelectorAll(".quantity").forEach(input => {
+                    input.addEventListener("change", updateQuantity);
+                });
 
-            document.querySelectorAll(".remove").forEach(button => {
-                button.addEventListener("click", removeItem);
-            });
+                document.querySelectorAll(".remove").forEach(button => {
+                    button.addEventListener("click", removeItem);
+                });
+            }
 
             document.querySelector(".final-bill-btn").addEventListener("click", () => {
                 localStorage.setItem("finalCart", JSON.stringify(cart));
