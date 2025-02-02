@@ -13,14 +13,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
         }
 
-        h1 {
+        header {
+            width: 100%;
+            background: #232f3e;
+            padding: 20px;
+            color: white;
+            font-size: 28px;
             text-align: center;
-            font-size: 36px;
-            margin-bottom: 20px;
-            color: #007bff;
+            margin-top: 0;
         }
 
         .invoice-container {
@@ -174,7 +176,9 @@
 </head>
 <body>
 
-    <h1>Invoice</h1>
+    <header>
+        Invoice-TaxBillszz
+    </header>
     <div class="invoice-container" id="invoice-container">
         <div class="invoice-header">
             <div class="company-info">
@@ -222,7 +226,9 @@
 
     </div>
     <div>
+        <br><br>
         <button class="back" onclick="window.location.href='cartpage.html'">Back to Cart</button>
+
         <button onclick="downloadInvoice()">Download Invoice (PDF)</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
