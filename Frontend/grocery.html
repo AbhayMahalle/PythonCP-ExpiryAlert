@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grocery Management - Expiry Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #F9FAFB;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+    }
+
+    .navbar {
+      background-color: #6366F1;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .navbar a:hover {
+      background-color: #4338CA;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      margin-bottom: 30px;
+    }
+
+    form input, form button {
+      width: 96%;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #CBD5E1;
+    }
+
+    form button {
+      background-color: #6366F1;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    form button:hover {
+      background-color: #3730A3;
+    }
+
+    .grocery-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .grocery-item {
+      background: white;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 5px solid #6366F1;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grocery-item div {
+      flex: 1;
+    }
+
+    .grocery-item span {
+      font-weight: 500;
+    }
+
+    .grocery-item small {
+      color: #6B7280;
+    }
+
+    .remove-btn {
+      background-color: #EF4444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .remove-btn:hover {
+      background-color: #B91C1C;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #6B7280;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h2>Expiry Tracker</h2>
+    <a href="index.html">Home</a>
+  </div>
+
+  <div class="container">
+    <h1>Grocery Management</h1>
+    <form id="groceryForm">
+      <input type="text" id="itemName" placeholder="Enter grocery item name" required />
+      <input type="date" id="expiryDate" required />
+      <button type="submit">Add Grocery</button>
+    </form>
+
+    <ul class="grocery-list" id="groceryList">
+     
+    </ul>
+
+    <div class="footer">
+      Stay fresh, stay organized!
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('groceryForm');
+    const groceryList = document.getElementById('groceryList');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const itemName = document.getElementById('itemName').value;
+      const expiryDate = document.getElementById('expiryDate').value;
+
+      if (itemName && expiryDate) {
+        const li = document.createElement('li');
+        li.className = 'grocery-item';
+        li.innerHTML = `
+          <div>
+            <span>${itemName}</span><br/>
+            <small>Expires on: ${expiryDate}</small>
+          </div>
+          <button class="remove-btn">Remove</button>
+        `;
+        groceryList.appendChild(li);
+
+        form.reset();
+      }
+    });
+
+    groceryList.addEventListener('click', function(e) {
+      if (e.target.classList.contains('remove-btn')) {
+        const item = e.target.closest('.grocery-item');
+        item.remove();
+      }
+    });
+  </script>
+</body>
+</html>
