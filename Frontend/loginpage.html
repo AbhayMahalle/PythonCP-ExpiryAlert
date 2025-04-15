@@ -89,9 +89,12 @@
   <div class="auth-box">
     <h2>Welcome to Expiry Tracker</h2>
     <p id="form-title">Login to your account</p>
-    <form id="auth-form">
+    <form id="signup-form" style="display: block;" action="/SignUp" method="POST">
       <div class="input-group" id="full-name-group">
-        <input type="text" id="full-name" placeholder="Full Name" />
+        <input type="text" id="full-name" placeholder="Full Name" required/>
+      </div>
+      <div class="input-group"  id="shop-name-group">
+        <input type="text" id="shop_name" placeholder="Shop Name" required />
       </div>
       <div class="input-group">
         <input type="email" id="email" placeholder="Email address" required />
@@ -99,30 +102,37 @@
       <div class="input-group">
         <input type="password" id="password" placeholder="Password" required />
       </div>
-      <button type="submit" id="submit-btn">Login</button>
+      <button type="submit" id="submit-btn">Sign Up</button>
     </form>
-    <span class="toggle-link" onclick="toggleForm()">Don't have an account? Sign up</span>
+    <span class="toggle-link" onclick="toggleForm(false)">Already have an account? Login</span>
   </div>
 
-  <script>
-    let isLogin = true;
-    const fullNameGroup = document.getElementById("full-name-group");
-    const formTitle = document.getElementById("form-title");
-    const submitBtn = document.getElementById("submit-btn");
-    const toggleText = document.querySelector(".toggle-link");
+  <form id="login-form" style="display: none;" action="/login" method="POST">
+    
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Email address" required />
+    </div>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password" required />
+    </div>
+    
+    <button type="submit" id="submit-btn">Login</button>
+  </form>
+  <span class="toggle-link" onclick="toggleForm(true)">Don't have an account? Sign up</span>
+</div>
 
-    function toggleForm() {
-      isLogin = !isLogin;
+  <script>
+    const loginForm = document.getElementById("login-form");
+    const signupForm = document.getElementById("signup-form");
+    
+    function toggleForm(isLogin) {
       if (isLogin) {
-        fullNameGroup.style.display = "none";
-        formTitle.innerText = "Login to your account";
-        submitBtn.innerText = "Login";
-        toggleText.innerText = "Don't have an account? Sign up";
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        
       } else {
-        fullNameGroup.style.display = "block";
-        formTitle.innerText = "Create a new account";
-        submitBtn.innerText = "Sign Up";
-        toggleText.innerText = "Already have an account? Login";
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
       }
     }
   </script>
