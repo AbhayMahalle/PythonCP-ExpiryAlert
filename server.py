@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from Database import User, get_db, hash_password, verify_password 
+from database import User, get_db, hash_password, verify_password 
 
 
 app = FastAPI()
