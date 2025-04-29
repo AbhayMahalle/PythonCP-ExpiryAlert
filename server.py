@@ -6,23 +6,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
-DATABASE_URL = "sqlite:///./users.db"
-
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-Base = declarative_base()
-
-Base.metadata.create_all(bind=engine)
-
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
-    full_name = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    shop_name = Column(String, unique=False, index=True, nullable=False)
+from Database import User, get_db, hash_password, verify_password 
 
 
 app = FastAPI()
@@ -34,21 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-def hash_password(password):
-    return pwd_context.hash(password)
-
-def verify_password(plain, hashed):
-    return pwd_context.verify(plain, hashed)
 
 @app.post("/SignUp")
 def signup(
