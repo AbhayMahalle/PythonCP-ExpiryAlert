@@ -12,9 +12,34 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #F9FAFB;
-      color: #111827;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(120deg, #e0f2ff, #6366F1); /* cold blue to white gradient */
+    color: #111827;
+    overflow-x: hidden;
+  }
+
+
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .navbar {
@@ -25,11 +50,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      animation: slideDown 0.6s ease-out;
     }
 
     .navbar h2 {
       margin: 0;
+      color: white;
       font-size: 1.5rem;
+      font-weight: 600;
     }
 
     .navbar a {
@@ -38,7 +66,7 @@
       font-size: 1rem;
       padding: 8px 12px;
       border-radius: 6px;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease;
     }
 
     .navbar a:hover {
@@ -52,10 +80,17 @@
       text-align: center;
     }
 
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      transition: all 0.4s ease;
+    }
+
     .subtitle {
       font-size: 1.1rem;
       margin-bottom: 40px;
       color: #6B7280;
+      transition: all 0.4s ease;
     }
 
     .card-container {
@@ -66,28 +101,57 @@
     }
 
     .card {
-      background: #FFFFFF;
+      position: relative;
       border-radius: 14px;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
       padding: 24px;
       width: 90%;
-      max-width: 280px;
-      transition: transform 0.3s;
+      max-width: 300px;
+      height: 220px;
+      color: white;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 1;
+      transform: translateY(30px);
+      opacity: 0;
+      animation: fadeInUp 0.7s ease forwards;
+      transition: transform 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-6px);
+      transform: scale(1.05);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+      transition: background 0.3s ease;
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
     }
 
     .card h2 {
       font-size: 1.4rem;
       margin-bottom: 10px;
-      color: #111827;
     }
 
     .card p {
       font-size: 0.98rem;
-      color: #4B5563;
       margin-bottom: 16px;
     }
 
@@ -99,13 +163,32 @@
       border-radius: 8px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: background-color 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     button:hover {
       background-color: #3730A3;
     }
 
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%) scale(0);
+      border-radius: 50%;
+      transition: transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    button:hover::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
 
     @media (min-width: 768px) {
       h1 {
@@ -119,58 +202,90 @@
   </style>
 </head>
 <body>
+
   <div class="navbar">
     <h2>Expiry Tracker</h2>
-    <a href="#">Profile</a>
+    <a href="profile.html">Profile</a>
   </div>
 
   <div class="container">
+    <h1>Smart Expiry Manager</h1>
     <p class="subtitle">
-      Stay ahead of expiry dates by organizing your groceries, medicines, and essential products in one simple place.
+      Manage expiry dates for all your store items efficiently.
     </p>
 
-    <div class="card-container" id="cardContainer">
-
-    </div>
-
+    <div class="card-container" id="cardContainer"></div>
+  </div>
 
   <script>
     const features = [
       {
         title: "Grocery Management",
         description: "Add groceries, set expiry dates, and get timely notifications.",
-        path: "grocery"
+        path: "grocery",
+        image: "https://t3.ftcdn.net/jpg/00/35/85/92/240_F_35859274_9D3pJXX5a0PiMYWjrASKeibGWFhwUB3U.jpg",
+        storageKey: "groceryItems"
       },
       {
         title: "Medicine Tracker",
         description: "Track medicine usage and receive alerts before expiry.",
-        path: "medicine"
+        path: "medicine",
+        image: "https://t4.ftcdn.net/jpg/02/76/80/31/240_F_276803150_yUZGcTLjJErZdmLw0GhDzARQY91S6yrv.jpg",
+        storageKey: "medicineItems"
       },
       {
         title: "Product Reminder",
         description: "Manage custom products and their expiry efficiently.",
-        path: "product"
+        path: "product",
+        image: "https://t3.ftcdn.net/jpg/06/86/57/66/240_F_686576610_wkM3mVyXem9cKlfiWVGxWaOrDEIfBXCa.jpg",
+        storageKey: "productItems"
       }
     ];
-
+  
     const container = document.getElementById("cardContainer");
-
-    features.forEach((feature) => {
+  
+    features.forEach((feature, index) => {
       const card = document.createElement("div");
       card.className = "card";
+      card.style.backgroundImage = `url(${feature.image})`;
+      card.style.animationDelay = `${index * 0.3}s`;
+  
+      const expiredItems = getExpiredItems(feature.storageKey);
+  
+      const alertHTML = expiredItems.length > 0
+        ? `<div style="background-color: #DC2626; color: white; padding: 8px 10px; border-radius: 6px; margin-bottom: 10px;">
+             ⚠️ Expired: ${expiredItems.map(item => item.name).join(", ")}
+           </div>`
+        : "";
+  
       card.innerHTML = `
-        <h2>${feature.title}</h2>
-        <p>${feature.description}</p>
-        <button onclick="navigate('${feature.path}')">Go to ${feature.title}</button>
+        <div class="card-content">
+          ${alertHTML}
+          <h2>${feature.title}</h2>
+          <p>${feature.description}</p>
+          <button onclick="navigate('${feature.path}')">Go to ${feature.title}</button>
+        </div>
       `;
       container.appendChild(card);
     });
-
-    function navigate(path) {
-     
-      window.location.href = path + ".html";
+  
+    function getExpiredItems(key) {
+      const data = localStorage.getItem(key);
+      if (!data) return [];
+  
+      try {
+        const items = JSON.parse(data);
+        const now = new Date();
+        return items.filter(item => new Date(item.expiryDate) < now);
+      } catch {
+        return [];
+      }
+    }
+  
+    function navigate(type) {
+      window.location.href = `management.html?type=${type}`;
     }
   </script>
+  
 </body>
 </html>
-
