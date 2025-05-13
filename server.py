@@ -52,3 +52,16 @@ def login(
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
     return {"message": f"Welcome back, {user.full_name}"}
+
+from datetime import datetime, date
+
+@app.get("/expired-items")
+def get_expired_items(db: Session = Depends(get_db)):
+    today = date.today()
+    expired_items = db.query(Grocery).filter(Grocery.expiry_date < today).all()
+    
+    if not expired_items:
+        return {"message": "No expired items found."}
+    
+    return {"expired_items": [item.item_name for item in expired_items]}
+
