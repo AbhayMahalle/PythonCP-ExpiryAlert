@@ -12,13 +12,11 @@
     }
 
     body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(120deg, #e0f2ff, #6366F1); /* cold blue to white gradient */
-    color: #111827;
-    overflow-x: hidden;
-  }
-
-
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, #e0f2ff, #6366F1);
+      color: #111827;
+      overflow-x: hidden;
+    }
 
     @keyframes fadeInUp {
       0% {
@@ -55,7 +53,6 @@
 
     .navbar h2 {
       margin: 0;
-      color: white;
       font-size: 1.5rem;
       font-weight: 600;
     }
@@ -83,14 +80,12 @@
     h1 {
       font-size: 2.4rem;
       margin-bottom: 16px;
-      transition: all 0.4s ease;
     }
 
     .subtitle {
       font-size: 1.1rem;
       margin-bottom: 40px;
       color: #6B7280;
-      transition: all 0.4s ease;
     }
 
     .card-container {
@@ -136,13 +131,11 @@
       bottom: 0;
       background: rgba(0, 0, 0, 0.4);
       z-index: 0;
-      transition: background 0.3s ease;
     }
 
     .card-content {
       position: relative;
       z-index: 1;
-      transition: all 0.3s ease;
     }
 
     .card h2 {
@@ -222,57 +215,56 @@
       {
         title: "Grocery Management",
         description: "Add groceries, set expiry dates, and get timely notifications.",
-        path: "/management",
+        type: "grocery",
         image: "https://t3.ftcdn.net/jpg/00/35/85/92/240_F_35859274_9D3pJXX5a0PiMYWjrASKeibGWFhwUB3U.jpg",
         storageKey: "groceryItems"
       },
       {
         title: "Medicine Tracker",
         description: "Track medicine usage and receive alerts before expiry.",
-        path: "medicine",
+        type: "medicine",
         image: "https://t4.ftcdn.net/jpg/02/76/80/31/240_F_276803150_yUZGcTLjJErZdmLw0GhDzARQY91S6yrv.jpg",
         storageKey: "medicineItems"
       },
       {
         title: "Product Reminder",
         description: "Manage custom products and their expiry efficiently.",
-        path: "product",
+        type: "product",
         image: "https://t3.ftcdn.net/jpg/06/86/57/66/240_F_686576610_wkM3mVyXem9cKlfiWVGxWaOrDEIfBXCa.jpg",
         storageKey: "productItems"
       }
     ];
-  
+
     const container = document.getElementById("cardContainer");
-  
+
     features.forEach((feature, index) => {
       const card = document.createElement("div");
       card.className = "card";
       card.style.backgroundImage = `url(${feature.image})`;
       card.style.animationDelay = `${index * 0.3}s`;
-  
+
       const expiredItems = getExpiredItems(feature.storageKey);
-  
+
       const alertHTML = expiredItems.length > 0
         ? `<div style="background-color: #DC2626; color: white; padding: 8px 10px; border-radius: 6px; margin-bottom: 10px;">
              ⚠️ Expired: ${expiredItems.map(item => item.name).join(", ")}
            </div>`
         : "";
-  
+
       card.innerHTML = `
         <div class="card-content">
           ${alertHTML}
           <h2>${feature.title}</h2>
           <p>${feature.description}</p>
-          <button onclick="navigate('${feature.path}')">Go to ${feature.title}</button>
+          <button onclick="navigate('${feature.type}')">Go to ${feature.title}</button>
         </div>
       `;
       container.appendChild(card);
     });
-  
+
     function getExpiredItems(key) {
       const data = localStorage.getItem(key);
       if (!data) return [];
-  
       try {
         const items = JSON.parse(data);
         const now = new Date();
@@ -281,11 +273,11 @@
         return [];
       }
     }
-  
+
     function navigate(type) {
-      window.location.href = `management.html?type=${type}`;
+      window.location.href = `/management?type=${type}`;
     }
   </script>
-  
+
 </body>
 </html>

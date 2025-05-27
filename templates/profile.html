@@ -19,25 +19,13 @@
     }
 
     @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes slideDown {
-      from {
-        transform: translateY(-100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .navbar {
@@ -60,10 +48,14 @@
       color: white;
       font-size: 1.5rem;
       font-weight: 600;
-      margin: 0;
     }
 
-    .navbar a {
+    .nav-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .nav-links a {
       color: white;
       text-decoration: none;
       font-size: 1rem;
@@ -72,10 +64,13 @@
       transition: background-color 0.3s ease;
     }
 
-    .navbar a:hover {
+    .nav-links a:hover {
       background-color: #4338CA;
     }
 
+    .nav-links a.active {
+      background-color: #4338CA;
+    }
 
     .profile-box {
       background: white;
@@ -191,7 +186,10 @@
   <!-- Navbar -->
   <div class="navbar">
     <h2>Expiry Tracker</h2>
-    <a href="index.html">Home</a>
+    <div class="nav-links">
+      <a href="index.html"> Home </a>
+      
+    </div>
   </div>
 
   <!-- Profile Form -->
@@ -226,7 +224,6 @@
     const profileImg = document.getElementById('profile-img');
     const imageInput = document.getElementById('image-input');
 
-    // Load saved profile
     window.onload = () => {
       const data = JSON.parse(localStorage.getItem('profileData'));
       if (data) {
@@ -241,7 +238,6 @@
       }
     };
 
-    // Preview image
     imageInput.addEventListener('change', function () {
       const file = this.files[0];
       if (file) {

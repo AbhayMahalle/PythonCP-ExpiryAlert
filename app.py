@@ -76,6 +76,30 @@ def management():
         return redirect('/login')
     return render_template('management.html')
 
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/management')
+def management():
+    item_type = request.args.get('type')
+    return render_template('management.html', item_type=item_type)
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+
+
 
 @app.context_processor
 def inject_user():
