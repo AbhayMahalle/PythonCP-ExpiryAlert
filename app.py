@@ -29,7 +29,7 @@ def login():
         else:
             flash('Invalid credentials', 'error')
             return redirect('/login')
-    return render_template('index.html')
+    return render_template('loginpage.html')
 
 
 @app.route('/SignUp', methods=['POST'])
