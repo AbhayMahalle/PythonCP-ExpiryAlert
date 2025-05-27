@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expiry Tracker - Login</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #F9FAFB;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .auth-box {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #4F46E5;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #6B7280;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #CBD5E1;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      background-color: #6366F1;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #4338CA;
+    }
+
+    .toggle-link {
+      display: block;
+      margin-top: 16px;
+      color: #4F46E5;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 500px) {
+      .auth-box {
+        margin: 20px;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <h2>Welcome to Expiry Tracker</h2>
+    <p id="form-title">Login to your account</p>
+
+    <!-- Sign Up Form -->
+    <form id="signup-form" action="/SignUp" method="POST" style="display: none;">
+      <div class="input-group">
+        <input type="text" name="full_name" placeholder="Full Name" required />
+      </div>
+      <div class="input-group">
+        <input type="text" name="shop_name" placeholder="Shop Name" required />
+      </div>
+      <div class="input-group">
+        <input type="email" name="email" placeholder="Email address" required />
+      </div>
+      <div class="input-group">
+        <input type="password" name="password" placeholder="Password" required />
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <!-- Login Form -->
+    <form id="login-form" action="/login" method="POST">
+      <div class="input-group">
+        <input type="email" name="email" placeholder="Email address" required />
+      </div>
+      <div class="input-group">
+        <input type="password" name="password" placeholder="Password" required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Toggle Link -->
+    <span class="toggle-link" onclick="toggleForm()">Don't have an account? Sign up</span>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("login-form");
+    const signupForm = document.getElementById("signup-form");
+    const toggleLink = document.querySelector(".toggle-link");
+    const formTitle = document.getElementById("form-title");
+
+    let isLogin = true;
+
+    function toggleForm() {
+      isLogin = !isLogin;
+      if (isLogin) {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        formTitle.textContent = "Login to your account";
+        toggleLink.textContent = "Don't have an account? Sign up";
+      } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        formTitle.textContent = "Create a new account";
+        toggleLink.textContent = "Already have an account? Login";
+      }
+    }
+  </script>
+</body>
+</html>

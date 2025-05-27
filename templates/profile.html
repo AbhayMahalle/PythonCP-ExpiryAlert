@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Expiry Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, #e0f2ff, #6366F1);
+      color: #111827;
+      padding-top: 80px;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 70px;
+      background-color: #6366F1;
+      color: white;
+      padding: 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      animation: slideDown 0.6s ease-out;
+      z-index: 1000;
+    }
+
+    .navbar h2 {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 10px 16px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      background-color: #4338CA;
+    }
+
+
+    .profile-box {
+      background: white;
+      margin: auto;
+      margin-top: 40px;
+      padding: 32px;
+      max-width: 450px;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    h2 {
+      color: #4F46E5;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .profile-img-container {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .profile-pic {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #6366F1;
+    }
+
+    #image-input {
+      margin-top: 8px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .profile-field {
+      margin: 16px 0;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #374151;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #CBD5E1;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      background-color: #6366F1;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      background-color: #4338CA;
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%) scale(0);
+      border-radius: 50%;
+      transition: transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    button:hover::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    @media (max-width: 600px) {
+      .profile-box {
+        padding: 24px;
+      }
+
+      .profile-pic {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <h2>Expiry Tracker</h2>
+    <a href="index.html">Home</a>
+  </div>
+
+  <!-- Profile Form -->
+  <div class="profile-box">
+    <h2>Owner Profile</h2>
+
+    <div class="profile-img-container">
+      <img id="profile-img" src="https://via.placeholder.com/130?text=+" class="profile-pic" alt="Profile Picture" />
+      <input type="file" accept="image/*" id="image-input" />
+    </div>
+
+    <div class="profile-field">
+      <label for="owner-name">Owner Name</label>
+      <input type="text" id="owner-name" placeholder="Enter owner's name" />
+    </div>
+    <div class="profile-field">
+      <label for="shop-name">Shop Name</label>
+      <input type="text" id="shop-name" placeholder="Enter shop name" />
+    </div>
+    <div class="profile-field">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Enter email address" />
+    </div>
+    <div class="profile-field">
+      <label for="contact">Contact Number</label>
+      <input type="tel" id="contact" placeholder="Enter contact number" />
+    </div>
+    <button onclick="saveProfile()">Save Profile</button>
+  </div>
+
+  <script>
+    const profileImg = document.getElementById('profile-img');
+    const imageInput = document.getElementById('image-input');
+
+    // Load saved profile
+    window.onload = () => {
+      const data = JSON.parse(localStorage.getItem('profileData'));
+      if (data) {
+        document.getElementById('owner-name').value = data.owner || '';
+        document.getElementById('shop-name').value = data.shop || '';
+        document.getElementById('email').value = data.email || '';
+        document.getElementById('contact').value = data.contact || '';
+        if (data.image) {
+          profileImg.src = data.image;
+          imageInput.classList.add('hidden');
+        }
+      }
+    };
+
+    // Preview image
+    imageInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          profileImg.src = e.target.result;
+          imageInput.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function saveProfile() {
+      const profileData = {
+        owner: document.getElementById('owner-name').value,
+        shop: document.getElementById('shop-name').value,
+        email: document.getElementById('email').value,
+        contact: document.getElementById('contact').value,
+        image: profileImg.src
+      };
+      localStorage.setItem('profileData', JSON.stringify(profileData));
+      alert("Profile saved successfully!");
+    }
+  </script>
+
+</body>
+</html>

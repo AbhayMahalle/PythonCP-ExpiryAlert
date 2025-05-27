@@ -2,19 +2,14 @@ from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from passlib.context import CryptContext
 
-DATABASE_URL = "sqlite:///./users.db"
+DATABASE_URL = "sqlite:///users.db"
 
+Base = declarative_base()
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-Base = declarative_base()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def hash_password(password):
-    return pwd_context.hash(password)
-
-def verify_password(plain, hashed):
-    return pwd_context.verify(plain, hashed)
 
 class User(Base):
     __tablename__ = "users"
@@ -23,14 +18,17 @@ class User(Base):
     full_name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    shop_name = Column(String, nullable=False, index=True)
-
-Base.metadata.create_all(bind=engine)
+    shop_name = Column(String, nullable=False)
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+def hash_password(password):
+    return pwd_context.hash(password)
+
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+# ✅ THIS is the function your error is complaining about
+def create_db():
+    Base.metadata.create_all(bind=engine)
