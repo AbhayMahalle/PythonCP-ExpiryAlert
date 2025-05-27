@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, flash
-from Database import User, SessionLocal, hash_password, verify_password
+from Database import User, SessionLocal, hash_password, verify_password, Item
 from sqlalchemy.orm import Session
 import os
 import shutil
@@ -107,9 +107,4 @@ def inject_user():
 
 
 if __name__ == '__main__':
-    # os.makedirs("templates", exist_ok=True)
-    # shutil.copy("index.html", "templates/index.html")
-    # shutil.copy("loginpage.html", "templates/loginpage.html")
-    # shutil.copy("profile.html", "templates/profile.html")
-    # shutil.copy("management.html", "templates/management.html")
     app.run(debug=True)
