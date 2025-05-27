@@ -108,3 +108,21 @@ def inject_user():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+import requests
+
+@app.route('/alerts')
+def alerts():
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    try:
+        response = requests.get("http://localhost:8000/expired-items")  # FastAPI endpoint
+        data = response.json()
+        expired_items = data.get("expired_items", [])
+    except Exception as e:
+        expired_items = []
+        flash("Could not fetch expired items.", "error")
+
+    return render_template('alerts.html', expired_items=expired_items)
+
