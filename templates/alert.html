@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expired Items</title>
+</head>
+<body>
+    <h2>Expired Items</h2>
+    <ul>
+        {% for item in expired_items %}
+            <li>{{ item }}</li>
+        {% else %}
+            <li>No expired items found.</li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>
