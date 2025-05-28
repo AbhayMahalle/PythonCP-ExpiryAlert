@@ -1,19 +1,16 @@
-from flask import Flask, render_template, request, redirect, session, flash ,Request
+from flask import Flask, render_template, request, redirect, session, flash
 from Database import User, SessionLocal, hash_password, verify_password, Item
 from sqlalchemy.orm import Session
-import os
-import shutil
+from datetime import date
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
-
 
 @app.route('/')
 def home():
     if 'user_id' not in session:
         return redirect('/login')
     return render_template('index.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -30,7 +27,6 @@ def login():
             flash('Invalid credentials', 'error')
             return redirect('/login')
     return render_template('loginpage.html')
-
 
 @app.route('/SignUp', methods=['POST'])
 def signup():
@@ -56,63 +52,23 @@ def signup():
     flash("Signup successful. Please login.")
     return redirect('/login')
 
-
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/login')
 
-
 @app.route('/profile')
 def profile():
     if 'user_id' not in session:
         return redirect('/login')
     return render_template('profile.html')
 
-
 @app.route('/management')
 def management():
     if 'user_id' not in session:
         return redirect('/login')
-    return render_template('management.html')
-
-from flask import Flask, render_template, request
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/management')
-def management():
     item_type = request.args.get('type')
     return render_template('management.html', item_type=item_type)
-
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/profile')
-def profile():
-    return render_template('profile.html')
-
-
-
-
-@app.context_processor
-def inject_user():
-    return dict(user_name=session.get('user_name', ''))
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-import requests
-
-from datetime import date
-from Database import SessionLocal, Item
 
 @app.route('/expired-items')
 def get_expired_items():
@@ -122,4 +78,9 @@ def get_expired_items():
     item_names = [item.name for item in expired_items]
     return {"expired_items": item_names}
 
+@app.context_processor
+def inject_user():
+    return dict(user_name=session.get('user_name', ''))
 
+if __name__ == '__main__':
+    app.run(debug=True)
