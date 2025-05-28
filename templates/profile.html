@@ -187,8 +187,8 @@
   <div class="navbar">
     <h2>Expiry Tracker</h2>
     <div class="nav-links">
-      <a href="/"> Home </a>
-      
+      <a href="/">Home</a>
+      <a href="#" onclick="logout()">Logout</a>
     </div>
   </div>
 
@@ -260,6 +260,12 @@
       };
       localStorage.setItem('profileData', JSON.stringify(profileData));
       alert("Profile saved successfully!");
+    }
+
+    function logout() {
+      localStorage.clear();
+      alert("You have been logged out.");
+      window.location.href = "/";
     }
   </script>
 
