@@ -111,18 +111,15 @@ if __name__ == '__main__':
 
 import requests
 
-@app.route('/alerts')
-def alerts():
-    if 'user_id' not in session:
-        return redirect('/login')
+from datetime import date
+from Database import SessionLocal, Item
 
-    try:
-        response = requests.get("http://localhost:8000/expired-items")  # FastAPI endpoint
-        data = response.json()
-        expired_items = data.get("expired_items", [])
-    except Exception as e:
-        expired_items = []
-        flash("Could not fetch expired items.", "error")
+@app.route('/expired-items')
+def get_expired_items():
+    db = SessionLocal()
+    today = date.today()
+    expired_items = db.query(Item).filter(Item.expiry_date < today).all()
+    item_names = [item.name for item in expired_items]
+    return {"expired_items": item_names}
 
-    return render_template('alerts.html', expired_items=expired_items)
 
